@@ -1,0 +1,4 @@
+# Olive bots own everything in a generated user-app repo. The user does not
+# write code in this repo directly — they speak a PRD into Olive on iOS, and
+# the worker layer commits on their behalf.
+* @olive-bot @olive-worker

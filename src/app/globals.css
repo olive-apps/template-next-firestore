@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --color-olive-gold: #b5944f;
+  --color-primary-background: #f7f5ef;
+  --color-ink: #1a1a1a;
+  --color-ink-muted: #5a5a5a;
+  --color-hairline: #d8d2c4;
+
+  --font-serif:
+    "New York", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+:root {
+  --background: var(--color-primary-background);
+  --foreground: var(--color-ink);
+  --accent: var(--color-olive-gold);
+  --muted: var(--color-ink-muted);
+  --hairline: var(--color-hairline);
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--background);
+}

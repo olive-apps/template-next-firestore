@@ -1,0 +1,37 @@
+name: build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: typecheck and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: install
+        run: npm ci
+
+      - name: typecheck
+        run: npm run typecheck
+
+      - name: build
+        env:
+          # Build-time only — the real value is injected by the provisioning
+          # endpoint at deploy time. CI does not need a real Firebase project
+          # to validate the static export builds; firebase-admin is lazy.
+          NEXT_PUBLIC_OLIVE_APP_ID: ci-template-check
+        run: npm run build
