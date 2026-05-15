@@ -183,13 +183,35 @@ The note didn't save. Tap again, or come back in a moment.
   Anything non-React lives here.
 - `public/` — static assets served as-is.
 
+## Per-app Firestore
+
+This app reads and writes Firestore under `/apps/{appId}/**` — never
+anywhere else. The scoping is enforced at the database, not just by
+convention: the custom token signed at deploy time carries the `appId`
+as a claim, and Firestore security rules reject any path outside that
+namespace.
+
+Use the helpers in `src/lib/olive-app.ts` — `appCollection('notes')`
+and `appDoc('notes', id)`. Do not reach for the Firestore SDK directly;
+the helpers ensure the path stays scoped.
+
+Every data-reading component must `await ensureReady()` once at mount
+before reading. The underlying sign-in promise is cached, so calling it
+from every component is cheap.
+
+Custom tokens live 24 hours. After that, the deployed app's Firestore
+reads fail with `unauthenticated`. The fix is to redeploy — the per-app
+credential mints a fresh token. Treat 24-hour expiry as a known
+limitation; longer-lived auth is a v2 concern.
+
 ## What never lives in this repo
 
 - Olive iOS code, Olive workers, anything from the broader Olive
   monorepo.
 - API keys, service accounts, `.env` files with real values. The
-  provisioning endpoint sets `FIREBASE_SERVICE_ACCOUNT_JSON` at deploy
-  time. Locally, `.env.local` is git-ignored.
+  deployer injects `NEXT_PUBLIC_OLIVE_APP_ID` and
+  `NEXT_PUBLIC_FIREBASE_CUSTOM_TOKEN_B64` at build time. Locally,
+  `.env.local` is git-ignored.
 - Build artifacts (`.next/`, `out/`, `node_modules/`).
 - Emojis in source code or documentation.
 
