@@ -215,6 +215,62 @@ limitation; longer-lived auth is a v2 concern.
 - Build artifacts (`.next/`, `out/`, `node_modules/`).
 - Emojis in source code or documentation.
 
+## End-user signups (opt-in)
+
+**Default mode is anonymous-per-app.** The deployer mints a per-app
+customToken and `ensureSignedIn()` in `src/lib/firebase.ts` signs in
+immediately. There is no end-user identity inside the app — every visitor
+shares one app-scoped session. Use `appCollection('notes')` and
+`appDoc('notes', id)` for everything. Do NOT wire `SignInPage`; do NOT
+import from `@/lib/auth`. The constitution prohibits Clerk / Auth.js /
+Lucia and v1 user apps stay anonymous.
+
+**When the PRD calls for end-user accounts**, the deployer provisions an
+Identity Platform tenant for the app and the envelope flips to
+`authMode: 'tenant'` with a `tenantId` field. The opt-in is dormant until
+Bill flips Identity Platform multi-tenancy on the project — every
+envelope before that flip is `authMode: 'anonymous-appid'` and the
+sign-in UI never appears.
+
+To detect the mode at runtime, read `envelope.authMode` from
+`readEnvelopeFromEnv()` in `src/lib/firebase.ts`. The standard composition
+when tenant mode is in play:
+
+```tsx
+"use client";
+import { useCurrentUser } from "@/lib/auth";
+import { SignInPage } from "@/components/SignInPage";
+
+export default function Page() {
+  const user = useCurrentUser();
+  if (!user) return <SignInPage />;
+  return <HomePage />;
+}
+```
+
+Two data scopes are available in tenant mode:
+
+- **`appCollection` / `appDoc`** — app-shared scope at
+  `apps/{appId}/{collection}/{doc}`. Gated by `request.auth.token.appId`.
+  Use for data every signed-in (or anonymous) user of the deployed app
+  shares: public content, app settings, etc.
+- **`userCollection` / `userDoc`** — per-user scope at
+  `apps/{appId}/users/{uid}/{collection}/{doc}`. Gated by BOTH
+  `request.auth.uid` AND `request.auth.token.appId`. Use for data that
+  belongs to a single end-user: their notes, their preferences, their
+  history.
+
+The `signUpWithEmail` helper in `src/lib/auth.ts` automatically attaches
+the `appId` custom claim to the new user via the api-pipeline
+`set-app-claim` route — without it, Firestore + Storage rules deny
+per-user reads. Do not call `createUserWithEmailAndPassword` directly.
+
+`SignInPage` also offers a "Continue without an account" link backed by
+`continueAsAppAnonymous` — this signs in with the envelope's customToken,
+which carries the appId claim only (no uid). Visitors taking this path
+can read app-shared data but cannot read or write per-user data.
+Surface or hide the link based on the spec.
+
 ## Before you commit
 
 1. `npm run typecheck` — clean.
