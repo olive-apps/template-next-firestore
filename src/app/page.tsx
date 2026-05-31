@@ -1,28 +1,63 @@
-import { Card } from "@/components/Card";
+import { EditorialHeader } from "@/components/EditorialHeader";
+import { Stamp } from "@/components/Stamp";
 
 // The home page is intentionally sparse. The worker will replace this with
-// whatever the PRD describes. The current text exists so a freshly-provisioned
-// repo renders something honest before any iteration has happened.
+// whatever the PRD describes. The current shape exists so a freshly-
+// provisioned repo renders a surface that READS as design-system-compliant,
+// and so anyone landing on the template repo sees the register in action.
 export default function HomePage() {
   return (
-    <div className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-serif tracking-editorial">
-          A small new app.
-        </h1>
-        <p className="text-base text-[var(--muted)]">
-          This page is the starting point. Soon it will be the thing it should
-          be.
-        </p>
-      </header>
+    <article className="space-y-12">
+      <EditorialHeader
+        eyebrow="Today"
+        title="A small new app."
+        dek="The shape of this page will become specific as the first note lands."
+      />
 
-      <Card title="What happens next">
-        <p>
-          The shape of this app will be drawn from a short conversation. When
-          that conversation is done, this page will become the home of
-          something specific.
+      <section className="space-y-6">
+        <p className="font-sans text-base leading-relaxed">
+          This page is the starting point. Soon it will be the thing it
+          should be — drawn from the conversation that built it.
         </p>
-      </Card>
-    </div>
+
+        <div className="flex flex-wrap items-center gap-4">
+          <Stamp as="link" href="#begin">
+            BEGIN
+          </Stamp>
+          <a
+            href="#about"
+            className="inline-flex items-center gap-1 font-sans text-sm text-ink-muted hover:text-ink"
+          >
+            <span>About this</span>
+            <span
+              aria-hidden="true"
+              className="material-symbols-outlined align-middle text-[1.125em]"
+            >
+              arrow_outward
+            </span>
+          </a>
+        </div>
+      </section>
+
+      <section
+        id="about"
+        className="border-t border-hairline pt-8 space-y-3"
+      >
+        <p className="font-sans text-[0.6875rem] font-bold uppercase tracking-eyebrow text-olive-gold">
+          II
+        </p>
+        <h2 className="font-serif text-2xl font-semibold leading-tight">
+          A small section
+        </h2>
+        <p className="font-serif italic text-ink-muted leading-relaxed">
+          The dek names why the section exists.
+        </p>
+        <p className="font-sans text-base leading-relaxed">
+          The first paragraph of body content sets the situation, the
+          complication, and the resolution. The register is editorial, not
+          marketing.
+        </p>
+      </section>
+    </article>
   );
 }

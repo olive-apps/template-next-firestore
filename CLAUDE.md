@@ -8,13 +8,33 @@ This is the **user's app**, not Olive's app. Olive built it. The end user
 opens this app and interacts with their thing. Nothing in the user-facing
 surface refers to Olive.
 
+## Design Language — read it before writing UI
+
+**Before you write any UI for this repo, read
+[`OLIVE_APPS_DESIGN_LANGUAGE.md`](./OLIVE_APPS_DESIGN_LANGUAGE.md).** It
+is canonical for everything visual in an Olive-built app: typography
+(Fraunces titles, Inter body, JetBrains Mono code), color (the
+disciplined olive-gold accent, ink + paper variables, dark mode via CSS
+variables), icons (Material Symbols Outlined — never emoji), components
+(`<EditorialHeader>`, `<Stamp>`, `<Eyebrow>`, `<Dek>`), what never gets
+used (rounded card backgrounds, gradients, spinners, generated art, the
+word "Loading…"). The fonts and CSS variables are already wired in
+`src/app/layout.tsx` + `src/app/globals.css` + `tailwind.config.ts` — you
+inherit them, you don't redefine them.
+
+This `CLAUDE.md` governs editor behavior (commits, TypeScript strictness,
+dependency discipline, the latency framing). The design language governs
+what gets *rendered*. They complement each other; do not duplicate one
+inside the other.
+
 ## Register
 
 The voice of every visible string in this app:
 
-- **Serif. Editorial. Quiet.** Match the font family declared in
-  `tailwind.config.ts` and `globals.css`. Never reach for a sans-serif
-  display font, never reach for a chunky display weight.
+- **Serif. Editorial. Quiet.** Use the type stack the design language
+  ships — `font-serif` (Fraunces) for headings, `font-sans` (Inter) for
+  body, `font-mono` (JetBrains Mono) for code. Never reach for a
+  chunky display weight above 700.
 - **Third register, not second.** Do not address the end user as "you" in
   copy. Write "Tap to begin," not "Tap below to begin your journey."
   Write "A small note," not "Your small note." This is the same register

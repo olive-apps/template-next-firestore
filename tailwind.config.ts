@@ -1,8 +1,14 @@
 import type { Config } from "tailwindcss";
 
-// Olive editorial palette. The accent is disciplined — apply it only where it
-// genuinely earns attention (single CTA per surface, an active state, a hairline
-// underline). The neutral background and serif typography do most of the work.
+// Olive Apps Design Language — Tailwind tokens. Read
+// OLIVE_APPS_DESIGN_LANGUAGE.md before editing. The CSS variables live in
+// globals.css; the Tailwind tokens below are aliases so utility classes
+// (text-ink, bg-paper, font-serif, etc.) read the same single source.
+//
+// Discipline: the accent (olive-gold) belongs on exactly six surfaces
+// (eyebrows, the gold Stamp, link hover underline, focus rings, active
+// tab underline, one warmest word per standfirst). Anything else is the
+// register breaking.
 const config: Config = {
   content: [
     "./src/app/**/*.{ts,tsx}",
@@ -12,25 +18,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        oliveGold: "#B5944F",
-        primaryBackground: "#f7f5ef",
-        ink: "#1a1a1a",
-        inkMuted: "#5a5a5a",
-        hairline: "#d8d2c4",
+        ink: "var(--ink)",
+        paper: "var(--paper)",
+        "ink-muted": "var(--ink-muted)",
+        "olive-gold": "var(--olive-gold)",
+        hairline: "var(--hairline)",
+        // Legacy aliases retained for any existing surface that may
+        // reference them; new code uses the tokens above.
+        oliveGold: "var(--olive-gold)",
+        primaryBackground: "var(--paper)",
+        inkMuted: "var(--ink-muted)",
       },
       fontFamily: {
-        serif: [
-          "New York",
-          "ui-serif",
-          "Georgia",
-          "Cambria",
-          "Times New Roman",
-          "Times",
-          "serif",
-        ],
+        serif: ["var(--font-serif)", "ui-serif", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "Menlo", "monospace"],
       },
       letterSpacing: {
-        editorial: "-0.01em",
+        editorial: "-0.015em",
+        eyebrow: "0.12em",
       },
     },
   },

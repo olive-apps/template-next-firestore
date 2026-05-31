@@ -1,44 +1,160 @@
 @import "tailwindcss";
 
-@theme {
-  --color-olive-gold: #b5944f;
-  --color-primary-background: #f7f5ef;
-  --color-ink: #1a1a1a;
-  --color-ink-muted: #5a5a5a;
-  --color-hairline: #d8d2c4;
+/* Olive Apps Design Language — canonical CSS variables.
+ *
+ * Read OLIVE_APPS_DESIGN_LANGUAGE.md before editing. Every visible surface
+ * inherits from these tokens; do not redefine them per-component.
+ */
 
-  --font-serif:
-    "New York", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+@theme {
+  /* Color tokens — exposed as Tailwind utilities (text-ink, bg-paper, etc.) */
+  --color-ink: #1a1a1a;
+  --color-paper: #f7f5ef;
+  --color-ink-muted: #5a5544;
+  --color-olive-gold: #b5944f;
+  --color-hairline: rgba(0, 0, 0, 0.08);
+
+  /* Font family tokens — read by the font-serif / font-sans / font-mono
+     utility classes. The actual font load is wired in layout.tsx via
+     next/font/google and surfaces here through the CSS variables it sets
+     on <html>. */
+  --font-serif: var(--font-serif), ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, Inter, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
 }
 
+/* Base font-size variable. The five steps the design language ships
+ * (XS/S/M/L/XL) flip --font-size-base via [data-font-size]; the body's
+ * font-size reads from it via rem. The default is M. */
 :root {
-  --background: var(--color-primary-background);
-  --foreground: var(--color-ink);
-  --accent: var(--color-olive-gold);
-  --muted: var(--color-ink-muted);
-  --hairline: var(--color-hairline);
+  --font-size-base: 16px;
+
+  /* These mirror the @theme color tokens but live at :root so they can
+     flip on data-theme without re-running the @theme cascade. */
+  --ink: #1a1a1a;
+  --paper: #f7f5ef;
+  --ink-muted: color-mix(in oklab, var(--ink) 65%, var(--paper) 35%);
+  --olive-gold: #b5944f;
+  --hairline: rgba(0, 0, 0, 0.08);
+}
+
+[data-font-size="xs"] { --font-size-base: 14px; }
+[data-font-size="s"]  { --font-size-base: 15px; }
+[data-font-size="m"]  { --font-size-base: 16px; }
+[data-font-size="l"]  { --font-size-base: 17px; }
+[data-font-size="xl"] { --font-size-base: 19px; }
+
+/* Dark mode — system preference. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #ede9dd;
+    --paper: #13110d;
+    --ink-muted: color-mix(in oklab, var(--ink) 65%, var(--paper) 35%);
+    --hairline: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Explicit user toggle wins over system preference. */
+[data-theme="light"] {
+  --ink: #1a1a1a;
+  --paper: #f7f5ef;
+  --ink-muted: color-mix(in oklab, var(--ink) 65%, var(--paper) 35%);
+  --hairline: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] {
+  --ink: #ede9dd;
+  --paper: #13110d;
+  --ink-muted: color-mix(in oklab, var(--ink) 65%, var(--paper) 35%);
+  --hairline: rgba(255, 255, 255, 0.08);
+}
+
+html {
+  font-size: var(--font-size-base);
 }
 
 html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-serif);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.01em;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Headings default to Fraunces. Per-utility overrides still work. */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+/* Body paragraph cadence — Inter at 1.6 leading. */
+p {
+  line-height: 1.6;
+}
+
+/* Code lives in JetBrains Mono. */
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+pre code {
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+/* Default anchor: inherits text color, underline appears in olive-gold on
+ * hover. This is the disciplined accent use the design language names. */
 a {
   color: inherit;
   text-decoration: none;
+  text-underline-offset: 0.2em;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: var(--olive-gold);
+  text-decoration-thickness: 1px;
+}
+
+/* Keyboard focus ring — olive-gold, no shadow. */
+:focus-visible {
+  outline: 2px solid var(--olive-gold);
+  outline-offset: 2px;
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--background);
+  background: var(--olive-gold);
+  color: var(--paper);
+}
+
+/* Material Symbols defaults. Outlined family, weight 400, fill 0, opsz 24.
+ * The font is loaded via the stylesheet link in layout.tsx <head>. */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 }
