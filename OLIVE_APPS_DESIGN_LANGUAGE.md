@@ -293,6 +293,16 @@ sections, as the underline on an active tab, as the rule beneath a
 masthead. It is **never** used as a fill (no "hairline boxes" — that's
 cards with extra steps).
 
+### Color taxonomy — brand, functional, categorical
+
+When an app grows past prose into data, keep three color *roles* distinct, and reach for the next role only when the prior one can't carry the meaning:
+
+1. **Brand accent — `--olive-gold`.** The single warm signature, rationed to the slots above. *Falsifiable test: if two gold things compete in one viewport, one of them is wrong.*
+2. **Functional / semantic — earned by meaning, not decoration.** A success/up vs alert/down pair (a restrained green and a restrained red) used only where the *value itself* is good or bad — never as a general accent.
+3. **Categorical — charts only.** When a chart genuinely must separate N series, a low-saturation categorical set is allowed *inside the chart surface only*, kept muted so it recedes behind ink and the gold accent. Never a categorical palette outside a chart.
+
+**Color is never the only signal.** Anything distinguished by hue must also differ by text, position, or shape — a reader who can't perceive the color still reads the surface.
+
 ---
 
 ## Light / Dark Mode
