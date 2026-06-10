@@ -2,6 +2,16 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import manifest from "../../instrument.json";
+import InstrumentFrame from "@/components/InstrumentFrame";
+
+// Instrument profile flips at BUILD time off the manifest: instruments skip
+// the Material Symbols CDN (bundles must render offline from the local
+// cache — no network exists inside the tile) and wrap content in
+// InstrumentFrame (tile/full/web display modes via the bridge handshake).
+// Normal hosted apps (instrument:false, the default) are byte-identical to
+// the pre-profile template.
+const isInstrument = manifest.instrument === true;
 
 // Neutral title — no Olive branding in the user-facing app. The worker will
 // rewrite this based on the PRD.
@@ -62,17 +72,24 @@ export default function RootLayout({
       className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <head>
-        {/* Material Symbols Outlined — single icon source. Variable font;
-            the .material-symbols-outlined class in globals.css pins
-            FILL/wght/GRAD/opsz defaults. */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0"
-        />
+        {/* Material Symbols Outlined — single icon source for NORMAL hosted
+            apps. Instruments skip it: their bundles render offline with no
+            network (next/font's Fraunces/Inter/JetBrains already self-host
+            in the build; instruments use no icon font). */}
+        {!isInstrument && (
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0"
+          />
+        )}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="min-h-screen">
-        <main className="mx-auto max-w-2xl px-6 py-12 lg:px-12">{children}</main>
+        {isInstrument ? (
+          <InstrumentFrame>{children}</InstrumentFrame>
+        ) : (
+          <main className="mx-auto max-w-2xl px-6 py-12 lg:px-12">{children}</main>
+        )}
       </body>
     </html>
   );

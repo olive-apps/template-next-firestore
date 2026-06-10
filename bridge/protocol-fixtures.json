@@ -1,0 +1,84 @@
+{
+  "protocolVersion": 1,
+  "handlerName": "olive",
+  "scopes": ["health.summary", "calendar.window", "memories.related", "conversations.search", "ingest"],
+  "signalEvents": ["open", "expand", "interact", "chart_viewed", "entry_added", "error"],
+  "errorCodes": ["scope_denied", "rate_limited", "unknown_op", "malformed", "unavailable"],
+  "limits": { "storeValueBytes": 65536, "storeKeyChars": 128, "feedbackNoteChars": 280, "signalPerSession": 60 },
+  "golden": [
+    {
+      "name": "context",
+      "request": { "op": "context" },
+      "reply": { "ok": true, "data": { "protocolVersion": 1, "appId": "spike-demo", "displayMode": "tile", "grantedScopes": ["health.summary"], "synthetic": false } }
+    },
+    {
+      "name": "read.health.granted",
+      "request": { "op": "read", "scope": "health.summary", "query": { "windowDays": 7 } },
+      "reply": { "ok": true, "data": { "summary": { "sleepHours": 7.1, "restingHR": 56, "hrvMs": 64, "steps": 8214, "daylightMin": 41 }, "windowDays": 7, "synthetic": false } }
+    },
+    {
+      "name": "read.undeclared.denied",
+      "request": { "op": "read", "scope": "calendar.window", "query": { "days": 7 } },
+      "reply": { "ok": false, "code": "scope_denied", "message": "scope not in the consented manifest" }
+    },
+    {
+      "name": "read.unknown.scope",
+      "request": { "op": "read", "scope": "contacts.all" },
+      "reply": { "ok": false, "code": "malformed", "message": "unknown scope" }
+    },
+    {
+      "name": "store.roundtrip.set",
+      "request": { "op": "store.set", "key": "entries", "value": [{ "dateISO": "2026-06-01", "bodyFatPct": 21.4 }] },
+      "reply": { "ok": true, "data": { "ok": true } }
+    },
+    {
+      "name": "store.roundtrip.get",
+      "request": { "op": "store.get", "key": "entries" },
+      "reply": { "ok": true, "data": { "key": "entries", "value": [{ "dateISO": "2026-06-01", "bodyFatPct": 21.4 }] } }
+    },
+    {
+      "name": "store.missing",
+      "request": { "op": "store.get", "key": "never-set" },
+      "reply": { "ok": true, "data": { "key": "never-set", "value": null } }
+    },
+    {
+      "name": "ingest.read",
+      "request": { "op": "ingest.read", "limit": 2 },
+      "reply": { "ok": true, "data": { "docs": [{ "id": "ing_1", "receivedISO": "2026-06-08T14:01:00Z", "source": "email", "fields": { "weightKg": "78.2", "bodyFatPct": "21.4" } }], "synthetic": false } }
+    },
+    {
+      "name": "signal.ok",
+      "request": { "op": "signal", "event": "chart_viewed", "context": { "surface": "tile" } },
+      "reply": { "ok": true, "data": { "ok": true } }
+    },
+    {
+      "name": "signal.unknown.event",
+      "request": { "op": "signal", "event": "totally_made_up" },
+      "reply": { "ok": false, "code": "malformed", "message": "unknown signal event" }
+    },
+    {
+      "name": "feedback.ok",
+      "request": { "op": "feedback", "kind": "helped" },
+      "reply": { "ok": true, "data": { "ok": true } }
+    },
+    {
+      "name": "unknown.op",
+      "request": { "op": "launch_missiles" },
+      "reply": { "ok": false, "code": "unknown_op", "message": "unknown op: launch_missiles" }
+    }
+  ],
+  "hostileStrings": [
+    "<script>document.title='pwned'</script>",
+    "\"/><img src=x onerror=\"document.title='pwned'\">",
+    "<svg/onload=\"document.title='pwned'\">",
+    "javascript:document.title='pwned'",
+    "{{constructor.constructor('document.title=\"pwned\"')()}}",
+    "'); document.title='pwned'; //",
+    "<iframe srcdoc=\"<script>parent.document.title='pwned'</script>\">",
+    "Lunch with </td><script>document.title='pwned'</script>",
+    "Meeting: =HYPERLINK(\"javascript:document.title='pwned'\")",
+    "<a href=\"olive-instrument://other-app/index.html\">cross</a>",
+    "data:text/html,<script>document.title='pwned'</script>",
+    "𝓊𝓃𝒾𝒸ℴ𝒹ℯ ＜script＞document.title='pwned'＜/script＞"
+  ]
+}

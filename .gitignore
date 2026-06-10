@@ -41,3 +41,10 @@ yarn-error.log*
 # firebase service account — never commit
 *service-account*.json
 firebase-adminsdk-*.json
+
+# instrument eval artifacts (generated; build.py + the seed regenerate them)
+eval/fixtures/data_*.json
+eval/fixtures/oracle_*.json
+eval/results/
+eval/playwright/results/
+eval/playwright/test-results/

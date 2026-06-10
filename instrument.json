@@ -1,0 +1,9 @@
+{
+  "$comment": "Instrument manifest \u2014 see bridge/instrument.schema.json. instrument:false = normal hosted app (the template default); the Brief-instrument commission sets instrument:true, name, appId, scopes. scopes are WRITE-ONCE after first release; schemaVersion is additive-only.",
+  "instrument": false,
+  "name": "App",
+  "appId": "template-not-deployed",
+  "version": 1,
+  "schemaVersion": 1,
+  "scopes": []
+}

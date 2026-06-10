@@ -224,6 +224,55 @@ reads fail with `unauthenticated`. The fix is to redeploy — the per-app
 credential mints a fresh token. Treat 24-hour expiry as a known
 limitation; longer-lived auth is a v2 concern.
 
+## The instrument profile (Brief Instruments)
+
+**When the build's skill is `brief-instrument`** (the spec or claim says so),
+this repo is being commissioned as an *instrument* — a mini app living as a
+section of Olive's Brief, rendered inside iOS from a locally cached bundle
+with NO network, reading the user's data only through the native bridge.
+Constitutional frame: Agency Article 19 (Instrument Autonomy). The rules
+below are gate-enforced (`eval/checks.py` + the platform release gate), not
+suggestions.
+
+- **Set `instrument.json`**: `instrument: true`, the name chosen with the
+  user, the appId from the project setup, and the declared `scopes`
+  (closed vocabulary; see `bridge/instrument.schema.json`). **Scopes are
+  WRITE-ONCE** — a revision that changes them is refused at the gate;
+  widening requires a fresh commission. `schemaVersion` bumps are
+  additive-only.
+- **Data comes from `src/lib/olive-bridge.ts` ONLY** (`import { olive } from
+  "@/lib/olive-bridge"`). No firebase imports, no credentials, no fetch to
+  anywhere — the bundle must render offline (`eval/checks.py
+  bundle_offline`). Per-instrument state = `olive.store`; external data
+  (e.g. forwarded e-mails) = `olive.ingest.read`.
+- **Every bridge string is hostile input.** Render as text. The contract,
+  corpus, and golden pairs live in `bridge/BRIDGE_PROTOCOL.md` +
+  `bridge/protocol-fixtures.json` — additive changes only, in lockstep with
+  the iOS tests.
+- **Synthetic data is labeled and framed.** Bridge replies carry
+  `synthetic`; when true the UI shows the rehearsal framing (the
+  InstrumentFrame does this at the top level; in-content renderings of
+  rehearsal values must keep the framing too). Synthetic NEVER renders as
+  user truth.
+- **The eval loop is the build loop.** Fill `eval/CONTRACT.md` (4–8
+  dimensions), extend `eval/fixtures/build.py` for the domain (seeded,
+  independent oracle), extend `eval/playwright/instrument.spec.ts` with
+  values-match-oracle assertions, then iterate `npm run build && python3
+  eval/run.py` until ALL gates are 1.0. If the spec and the tests cannot
+  both be satisfied, STOP and report "cannot pass honestly" — abstention is
+  a sanctioned, receipted outcome; weakening an assertion is gamed-gate
+  quarantine.
+- **Health-scoped instruments** (rendering ANY biometrics, including
+  user-forwarded scale readings): no daily scores, no streaks, no
+  restriction mechanics; honest absence; erasure is real (Article 18 rules
+  1/3/4/5/9/10 via Article 19 rule 8). Never propose experiments over
+  physiological data — that crosses into the Health Rhythm loop's
+  jurisdiction, not yours.
+- **Layout**: `InstrumentFrame` handles tile/full/web modes from the bridge
+  handshake; build content for the tile first (one viewport, finishable),
+  full mode second. The design language's "The Instrument Tile" section
+  binds.
+
 ## What never lives in this repo
 
 - Olive iOS code, Olive workers, anything from the broader Olive

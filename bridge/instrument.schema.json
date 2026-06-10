@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "instrument.json — the instrument manifest",
+  "description": "Build-time manifest for Brief Instruments (PLAN-2026-06-09-brief-instruments). The REGISTRY copy written at first release is authoritative for scope enforcement (iOS reads scopes from the registry, never from the bundle); this file is the worker's declaration, byte-compared at the release gate. scopes are WRITE-ONCE: a revision changing them is refused (Agency Art 19 rule 2). schemaVersion is additive-only: bump it ONLY for additive storage-shape changes; reverts across a bump are blocked.",
+  "type": "object",
+  "required": ["instrument", "name", "appId", "version", "schemaVersion", "scopes"],
+  "additionalProperties": false,
+  "properties": {
+    "instrument": {
+      "type": "boolean",
+      "description": "false in the template default (normal hosted apps); the commission sets true, which flips the instrument layout/profile at build time."
+    },
+    "name": { "type": "string", "minLength": 1, "maxLength": 60, "description": "The instrument's byline name, chosen with the user at commissioning (e.g. \"Arnold\")." },
+    "appId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$", "description": "The hosted-olive appId (<lowercased-uid>-<slug>); also the custom-scheme host the tile is pinned to." },
+    "version": { "type": "integer", "minimum": 1, "description": "Informational app version; the serving source of truth is hosted-apps currentVersion." },
+    "schemaVersion": { "type": "integer", "minimum": 1, "description": "Per-instrument storage schema version. ADDITIVE-ONLY; the release gate refuses non-monotonic or >+1 bumps and blocks reverts across a bump." },
+    "scopes": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 5,
+      "items": { "enum": ["health.summary", "calendar.window", "memories.related", "conversations.search", "ingest"] },
+      "description": "Declared data scopes — the consent sheet's ingredients. WRITE-ONCE at first release."
+    },
+    "ingest": {
+      "type": "object",
+      "description": "Required iff scopes includes 'ingest'. Declares the sender filter for email→instrument routing.",
+      "additionalProperties": false,
+      "required": ["senderFilter"],
+      "properties": {
+        "senderFilter": { "type": "array", "minItems": 1, "maxItems": 5, "items": { "type": "string", "maxLength": 120 }, "description": "Case-insensitive sender substrings (e.g. \"@withings.com\") the relay routes into apps/{appId}/ingest." }
+      }
+    },
+    "benchmark": {
+      "type": "object",
+      "description": "The commission's pass bar, mirrored from eval/CONTRACT.md.",
+      "additionalProperties": false,
+      "properties": {
+        "composite": { "type": "number", "minimum": 0.9, "maximum": 1 },
+        "gates": { "const": "all == 1.0" }
+      }
+    }
+  }
+}

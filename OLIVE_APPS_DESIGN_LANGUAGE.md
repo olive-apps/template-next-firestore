@@ -801,6 +801,42 @@ exclamation points.
 
 ---
 
+## The Instrument Tile
+
+Instruments (Brief Instruments — mini apps commissioned from conversation,
+living as sections of Olive's Brief) render this design language inside a
+tile whose CHROME BELONGS TO THE BRIEF: the beat already supplies the
+eyebrow, the serif headline, the gold rule, the foot numeral. The
+instrument renders content only.
+
+- **Tile mode** (`displayMode: "tile"` from the bridge handshake): no
+  masthead, no EditorialHeader — the Brief's beat is the masthead. Compact
+  padding (`px-4 py-4`). One viewport, finishable: the commissioned
+  question answered in the first screenful, no internal scroll competing
+  with the Brief's scroll. No icon font (instruments ship no Material
+  Symbols — bundles render offline).
+- **Full mode**: the expanded instrument. EditorialHeader is appropriate
+  here; standard page paddings return.
+- **The rehearsal line.** Whenever rendered data carries `synthetic: true`
+  the surface says so, in serif italic, before the data: *"A rehearsal —
+  invented numbers, so you can judge the shape of it."* Synthetic never
+  renders as user truth; this line is the floor, not the ceiling, of that
+  honesty.
+- **Latency is a sentence here too.** The tile never spins; while the
+  bridge resolves, one considering line in the secondary color. The Brief
+  imposes its own rhythm — a tile that flickers states fights the page.
+- **Numbers carry their absence.** A missed week renders as a named gap
+  ("no readings this week"), never an interpolated line pretending
+  otherwise. For health-scoped instruments this is constitutional
+  (Article 18 rule 3 via Article 19): no daily scores, no streaks, no
+  perfect-week mechanics — ever.
+- **One earned accent, same discipline.** The tile inherits the accent
+  rules; in tile mode the single warmest element is usually the one number
+  the user commissioned the instrument to answer.
+- **Receipts speak in marginalia.** When a revision ships, the Brief shows
+  the gate-stamped receipt next to the tile; the instrument itself never
+  renders changelogs, version banners, or "what's new" chrome.
+
 ## When You're About to Break a Rule
 
 Rules exist because the app breaks if every surface invents its own

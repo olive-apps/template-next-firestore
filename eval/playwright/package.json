@@ -1,0 +1,13 @@
+{
+  "name": "instrument-eval-playwright",
+  "private": true,
+  "type": "module",
+  "description": "Self-contained Playwright harness for the instrument eval (kept OUT of the app's devDependencies per the template dependency discipline; install here only).",
+  "scripts": {
+    "install-browsers": "playwright install chromium",
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}
