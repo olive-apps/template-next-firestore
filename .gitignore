@@ -48,3 +48,7 @@ eval/fixtures/oracle_*.json
 eval/results/
 eval/playwright/results/
 eval/playwright/test-results/
+
+# python bytecode (eval scaffold)
+__pycache__/
+*.pyc
