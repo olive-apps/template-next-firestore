@@ -35,11 +35,21 @@ The voice of every visible string in this app:
   ships — `font-serif` (Fraunces) for headings, `font-sans` (Inter) for
   body, `font-mono` (JetBrains Mono) for code. Never reach for a
   chunky display weight above 700.
-- **Third register, not second.** Do not address the end user as "you" in
-  copy. Write "Tap to begin," not "Tap below to begin your journey."
-  Write "A small note," not "Your small note." This is the same register
-  the New Yorker uses for a caption: descriptive, restrained, not
-  performative.
+- **Second person where a person is addressed; no person at all
+  elsewhere.** Founder ruling 2026-08-17, machine-wide. This **replaces**
+  the old "third register, not second" rule ("do not address the end user
+  as 'you'"), which is void — it is what made copy across every product
+  read as AI-written. Do not restore it from git history; it was
+  reversed, not lost. Most strings carry no pronoun: "Tap to begin," not
+  "Tap below to begin your journey" — short and pronoun-free, not third
+  person. For a consequence, a warning or an instruction, say "you."
+  Never "we/our/us" in an interface.
+- **Never define a noun, and never narrate the data model on a surface.**
+  "A note is a record you hold" is a dictionary entry, not a product. The
+  screen is already named; the user has no schema. Fewer words wins, and
+  nothing is said twice: verb-first buttons of three words or fewer,
+  titles that are nouns, no subtitle under a title. Worked spec:
+  `judgment-gate-app/docs/ux/VOICE.md`.
 - **Never refer to Olive in user-facing copy.** No "powered by Olive," no
   "Olive built this," no "ask Olive." The user knows where the app came
   from. The app is the user's now.
@@ -162,19 +172,27 @@ the default for a reason.
 
 ## Empty states
 
-There is no "No data," "No results found," or "Nothing here yet" in this
-app. If a Firestore query returns an empty array, render a sentence in
-serif that explains what will appear once the relevant action happens.
+**Inverted 2026-08-17 by founder ruling.** This section used to require
+"Notes you save will appear here" and forbid "No notes yet." That is
+backwards, and it put a sentence describing how a list fills itself on
+every empty surface. The examples below are now the right way round — do
+not swap them back.
 
-A correct empty state names the action and the future state:
+An empty state is at most **one short sentence and one button.** The
+sentence names the state or the next act, never both, never a definition,
+never a description of how the list populates.
+
+A correct empty state:
+
+> No notes yet.  ·  [ New note ]
+
+A wrong empty state:
 
 > Notes you save will appear here.
 
-A wrong empty state names the absence:
-
-> No notes yet.
-
-The first is editorial; the second is administrative.
+"No X yet." is allowed and is usually right. Many empty states need only
+the button. Filtered-empty is its own case: "No matches." plus a **Clear
+filters** control.
 
 ## Errors
 
