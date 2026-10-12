@@ -60,11 +60,37 @@ Editorial register applies to every visible string the app renders. This
 extends `CLAUDE.md` — the rules below are about what gets *seen*, not
 what gets *committed*.
 
-1. **Third register, not second.** Address the reader as a reader, not as
-   "you." Write "Tap to begin," not "Tap below to begin your journey."
-   Write "A small note," not "Your small note." This is the same register
-   the New Yorker uses for a caption: descriptive, restrained, not
-   performative.
+1. **Second person where a person is addressed; no person at all
+   elsewhere.** Founder ruling 2026-08-17, machine-wide. This **replaces**
+   the old "third register, not second" rule, which said to address the
+   reader as a reader and never as "you." That rule is void — it is what
+   made copy across every product read as AI-written. Do not restore it
+   from git history; it was reversed, not lost.
+
+   Most strings carry no pronoun at all: "Tap to begin," not "Tap below to
+   begin your journey" — that example survives because it is short and
+   pronoun-free, not because it is third person. When a sentence states a
+   consequence, a warning or an instruction, address the user as "you"
+   plainly. Never "we/our/us" in an interface. Third person only when the
+   sentence is genuinely about a third party.
+
+   Two habits the same ruling kills, because they travelled with the old
+   register:
+
+   - **Never define a noun and never narrate the data model on a surface.**
+     "A collection is a label on a record" is a dictionary entry, not a
+     product. The screen is already named; the user has no schema.
+   - **Fewer words, and never the same thing twice.** Verb-first buttons of
+     three words or fewer. Titles are nouns. A subtitle under a title means
+     the title is bad — delete the subtitle. Empty states are one short
+     sentence ("No notes yet.") plus at most one button; "No X yet." is
+     allowed and is usually right. Errors are one sentence: what failed,
+     then what to do ("Couldn't save. Try again.").
+
+   The worked spec — word budgets per element, a named kill list, 36
+   before/after pairs — is `judgment-gate-app/docs/ux/VOICE.md`. Nothing in
+   this ruling touches typography, color, spacing or the ethics rules
+   elsewhere in this file.
 2. **Olive is "Olive," never "it."** When the surface names the latency
    ("Olive is thinking."), it spells the name; it does not refer to the
    thing as an "AI assistant" or "the model."
